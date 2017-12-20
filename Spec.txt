@@ -1,0 +1,33 @@
+========================
+    Login Spec.
+========================
+
+Acceptance Criteria
+----------------------
+
+1. Button Login should disable if username and/or password is invalid
+    1.1 Username must be email.
+    1.2 Password length is between 8 to 15 characters.
+2. Button Login state (disable/enable) should change immediately when user type username or password.
+3. Success dialog should display when user enter a valid user account.
+4. Alert dialog should display when user enter invalid user account (wrong username, wrong password, not exist).
+
+Spec. By Examples
+-----------------------------------------------------------------------------------------------------------------------------------------------
+|      Case       |       Username      |      Password      |      Button Login  state    |                Press Button Login                |
+-----------------------------------------------------------------------------------------------------------------------------------------------
+  default             <empty>                 <empty>                  disable                -
+  only username       user@mail.com           <empty>                  disable                -
+  only password       <empty>                 12345678                 disable                -
+  space (any length)  "    "                  "        "               disable                -
+  not email           user.someone            12345678                 disable                -
+  shot password       user@mail.com           123456                   disable                -
+  long password       user@mail.com           123456789abcdefg         disable                -
+-----------------------------------------------------------------------------------------------------------------------------------------------
+  success             user@mail.com           12345678                 enable                 Show Success Dialog (Info dialog)
+-----------------------------------------------------------------------------------------------------------------------------------------------
+  wrong password      user@mail.com           12345678                 enable                 Show Invalid Dialog
+                                                                                              (Alert Dialog, Invalid Username and/or Password)
+  invalid user        noone@mail.com          12345678                 enable                 Show Invalid Dialog
+                                                                                              (Alert Dialog, Invalid Username and/or Password)
+-----------------------------------------------------------------------------------------------------------------------------------------------
