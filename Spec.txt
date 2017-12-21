@@ -12,7 +12,9 @@ Acceptance Criteria
 3. Success dialog should display when user enter a valid user account.
 4. Alert dialog should display when user enter invalid user account (wrong username, wrong password, not exist).
 
+
 Spec. By Examples
+
 -----------------------------------------------------------------------------------------------------------------------------------------------
 |      Case       |       Username      |      Password      |      Button Login  state    |                Press Button Login                |
 -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -21,7 +23,7 @@ Spec. By Examples
   only password       <empty>                 12345678                 disable                -
   space (any length)  "    "                  "        "               disable                -
   not email           user.someone            12345678                 disable                -
-  shot password       user@mail.com           123456                   disable                -
+  short password      user@mail.com           123456                   disable                -
   long password       user@mail.com           123456789abcdefg         disable                -
 -----------------------------------------------------------------------------------------------------------------------------------------------
   success             user@mail.com           12345678                 enable                 Show Success Dialog (Info dialog)
@@ -31,3 +33,38 @@ Spec. By Examples
   invalid user        noone@mail.com          12345678                 enable                 Show Invalid Dialog
                                                                                               (Alert Dialog, Invalid Username and/or Password)
 -----------------------------------------------------------------------------------------------------------------------------------------------
+
+API Spec.
+----------------
+URL :-
+Dev: https://dev.aycap.com/v1/authen/
+Production: https://uchoose.aycap.com/v1/authen/
+
+----------------
+Method: POST
+
+----------------
+Request Body :-
+{
+    "userName": "user@mail.com",
+    "password": "12345678"
+}
+
+Response :-
+----------------
+Success
+
+HTTP Status: 200
+Response Body:-
+{
+    "status": "granted"
+}
+
+----------------
+Fail
+
+HTTP Status: 404
+Response Body:-
+{
+    "status": "Invalid Username and/or Password"
+}
