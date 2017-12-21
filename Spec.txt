@@ -26,7 +26,7 @@ Spec. By Examples
 -----------------------------------------------------------------------------------------------------------------------------------------------
   success             user@mail.com           12345678                 enable                 Show Success Dialog (Info dialog)
 -----------------------------------------------------------------------------------------------------------------------------------------------
-  wrong password      user@mail.com           12345678                 enable                 Show Invalid Dialog
+  wrong password      user@mail.com           11111111                 enable                 Show Invalid Dialog
                                                                                               (Alert Dialog, Invalid Username and/or Password)
   invalid user        noone@mail.com          12345678                 enable                 Show Invalid Dialog
                                                                                               (Alert Dialog, Invalid Username and/or Password)
