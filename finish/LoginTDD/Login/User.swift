@@ -11,4 +11,12 @@ import Foundation
 struct User {
     let userName: String
     let password: String
+    
+    func toData() -> Data? {
+        let userDictionary = [
+            "userName": userName,
+            "password": password
+        ]
+        return try? JSONSerialization.data(withJSONObject: userDictionary, options: [])
+    }
 }

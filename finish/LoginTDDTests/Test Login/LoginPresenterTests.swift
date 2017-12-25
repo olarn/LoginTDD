@@ -18,11 +18,6 @@ class LoginPresenterTests: XCTestCase {
         presenter = LoginPresenter()
     }
     
-    override func tearDown() {
-
-        super.tearDown()
-    }
-
     func testLoginButtonShouldBeFalseWhenInputEmptyUserNameAndPassword() {
         let expected = expectation(description: #function)
         
