@@ -15,16 +15,12 @@ class LoginPresenter {
     //MARK:- Input
     
     func set(userName: String, password: String) {
-        if let setButtonStateTo = buttonLoginState {
-            if userName.isEmpty || password.isEmpty ||
-                !userName.isValidEmail() ||
-                password.tooShort() ||
-                password.tooLong()
-            {
-                setButtonStateTo(false)
-                return
-            }
-            setButtonStateTo(true)
+        if let setButtonStateBy = buttonLoginState {
+            let validateResult = userName.isNotEmpty() && password.isNotEmpty() &&
+                userName.isValidEmail() &&
+                password.notTooShort() &&
+                password.notTooLong()
+            setButtonStateBy(validateResult)
         }
     }
     
@@ -36,17 +32,23 @@ class LoginPresenter {
 
 extension String {
     
+    fileprivate func isNotEmpty() -> Bool {
+        return
+            self.trimmingCharacters(in: CharacterSet.whitespaces) != "" ||
+            !self.isEmpty
+    }
+    
     fileprivate func isValidEmail() -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: self)
     }
     
-    fileprivate func tooShort() -> Bool {
-        return self.count < 8
+    fileprivate func notTooShort() -> Bool {
+        return self.count >= 8
     }
     
-    fileprivate func tooLong() -> Bool {
-        return self.count > 15
+    fileprivate func notTooLong() -> Bool {
+        return self.count <= 15
     }
 }
