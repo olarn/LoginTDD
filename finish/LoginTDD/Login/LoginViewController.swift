@@ -14,11 +14,15 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     
-    let presenter = LoginPresenter()
+    var presenter = LoginPresenter()
+    var service: UserServicesProtocol?
+    var restClient: RestClientProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dependencyInjection()
         handleButtonLoginState(from: presenter)
+        handleOnUserAuthentication(from: presenter)
     }
 
     @IBAction func onTextFieldTextChanged(_ sender: Any) {
@@ -28,7 +32,23 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginButtonTapped(_ sender: Any) {
-        print("Login Button Tapped")
+        presenter.userServices = self.service
+        presenter.authen(
+            with: userNameTextField.text ?? "",
+            password: passwordTextField.text ?? "")
+    }
+}
+
+// MARK:- Compose App Layers
+
+extension LoginViewController {
+    
+    private func dependencyInjection() {
+        self.service = UserServices()
+        self.restClient = RestClient()
+        
+        self.service?.restClient = self.restClient
+        self.presenter.userServices = self.service
     }
 }
 
@@ -36,12 +56,31 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController {
     
-    func handleButtonLoginState(from presenter: LoginPresenter) {
-        presenter.buttonLoginState = { isEnable in
+    private func handleButtonLoginState(from presenter: LoginPresenter?) {
+        presenter?.buttonLoginState = { isEnable in
             self.loginButton.isUserInteractionEnabled = isEnable
             self.loginButton.backgroundColor = isEnable ? UIColor.blue : UIColor.lightGray
         }
     }
     
+    private func handleOnUserAuthentication(from presenter: LoginPresenter?) {
+        presenter?.userAuthenCallback = { result, message in
+            if result {
+                // navigate to main view controller
+            } else {
+                let alert = UIAlertController(
+                    title: "Error",
+                    message: message,
+                    preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(
+                    UIAlertAction(
+                        title: "OK",
+                        style: .default,
+                        handler: nil)
+                )
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
 }
 

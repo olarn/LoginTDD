@@ -9,9 +9,12 @@
 import Foundation
 
 typealias ButtonLoginState = (Bool) -> Void
+typealias UserAuthenCallback = (Bool, String) -> Void
 
 class LoginPresenter {
 
+    var userServices: UserServicesProtocol?
+    
     //MARK:- Input
     
     func set(userName: String, password: String) {
@@ -24,8 +27,21 @@ class LoginPresenter {
         }
     }
     
+    func authen(with userName: String, password: String) {
+        if let service = self.userServices {
+            let user = User(userName: userName, password: password)
+            service.authen(with: user, result: { result, message in
+                if let callback = self.userAuthenCallback {
+                    callback(result, message)
+                }
+            })
+        }
+    }
+    
     //MARK:- Output
+    
     var buttonLoginState: ButtonLoginState?
+    var userAuthenCallback: UserAuthenCallback?
 }
 
 // MARK:- username and password validation logic

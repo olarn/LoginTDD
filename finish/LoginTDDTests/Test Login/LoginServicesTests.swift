@@ -52,7 +52,8 @@ class LoginServicesTests: XCTestCase {
         let user = User(userName: username, password: password)
 
         // Act
-        let userServices = UserServices(restClient: StubRestClientForAuthenUserSuccess())
+        let userServices = UserServices()
+        userServices.restClient = StubRestClientForAuthenUserSuccess()
         userServices.authen(with: user) { isValid, status in
             
             // Assert
@@ -79,7 +80,8 @@ class LoginServicesTests: XCTestCase {
         let user = User(userName: username, password: password)
         
         // Act
-        let userServices = UserServices(restClient: StubRestClientForAuthenInvalidUsernameAndPassword())
+        let userServices = UserServices()
+        userServices.restClient = StubRestClientForAuthenInvalidUsernameAndPassword()
         userServices.authen(with: user) { isValid, status in
             
             // Assert
@@ -106,7 +108,8 @@ class LoginServicesTests: XCTestCase {
         let user = User(userName: username, password: password)
         
         // Act
-        let userServices = UserServices(restClient: StubRestClientWithInvalidJSONFormatForAuthenUser())
+        let userServices = UserServices()
+        userServices.restClient = StubRestClientWithInvalidJSONFormatForAuthenUser()
         userServices.authen(with: user) { isValid, status in
             
             // Assert
@@ -133,7 +136,8 @@ class LoginServicesTests: XCTestCase {
         let user = User(userName: username, password: password)
         
         // Act
-        let userServices = UserServices(restClient: StubRestClientWithInvalidJSONAttributeForAuthenUser())
+        let userServices = UserServices()
+        userServices.restClient = StubRestClientWithInvalidJSONAttributeForAuthenUser()
         userServices.authen(with: user) { isValid, status in
             
             // Assert

@@ -10,16 +10,21 @@ import Foundation
 
 let INVALID_JSON_FORMAT = "Invalid JSON format"
 
-class UserServices {
+class UserServices: UserServicesProtocol {
     
-    private let restClient: RestClientProtocol
+    private var client: RestClientProtocol?
     
-    init(restClient: RestClientProtocol) {
-        self.restClient = restClient
+    var restClient: RestClientProtocol? {
+        get {
+            return self.client
+        }
+        set {
+            self.client = newValue
+        }
     }
     
     func authen(with user: User, result: (Bool, String) -> Void) {
-        restClient.request(method: .post, body: user.toData()) { responseData, error in
+        restClient?.request(method: .post, body: user.toData()) { responseData, error in
             do {
                 let responseDict = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any]
                 let status = (responseDict?["status"] as? String) ?? ""

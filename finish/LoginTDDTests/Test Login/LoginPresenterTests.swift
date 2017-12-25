@@ -43,7 +43,7 @@ class LoginPresenterTests: XCTestCase {
         let expected = expectation(description: #function)
         
         let expectedButtonState = false
-        let emptyUserName = "user@mail.com"
+        let username = "user@mail.com"
         let emptyPassword = ""
         
         presenter.buttonLoginState = { state in
@@ -51,7 +51,7 @@ class LoginPresenterTests: XCTestCase {
             expected.fulfill()
         }
         
-        presenter.set(userName: emptyUserName, password: emptyPassword)
+        presenter.set(userName: username, password: emptyPassword)
         
         waitForExpectations(timeout: 1) { error in
             if let e = error {
@@ -65,14 +65,14 @@ class LoginPresenterTests: XCTestCase {
         
         let expectedButtonState = false
         let emptyUserName = ""
-        let emptyPassword = "12345678"
+        let password = "12345678"
         
         presenter.buttonLoginState = { state in
             XCTAssertTrue(state == expectedButtonState, #function)
             expected.fulfill()
         }
         
-        presenter.set(userName: emptyUserName, password: emptyPassword)
+        presenter.set(userName: emptyUserName, password: password)
         
         waitForExpectations(timeout: 1) { error in
             if let e = error {
@@ -106,15 +106,15 @@ class LoginPresenterTests: XCTestCase {
         let expected = expectation(description: #function)
         
         let expectedButtonState = false
-        let emptyUserName = "user.someone"
-        let emptyPassword = "12345678"
+        let notEmailUsername = "user.someone"
+        let password = "12345678"
         
         presenter.buttonLoginState = { state in
             XCTAssertTrue(state == expectedButtonState, #function)
             expected.fulfill()
         }
         
-        presenter.set(userName: emptyUserName, password: emptyPassword)
+        presenter.set(userName: notEmailUsername, password: password)
         
         waitForExpectations(timeout: 1) { error in
             if let e = error {
@@ -127,15 +127,15 @@ class LoginPresenterTests: XCTestCase {
         let expected = expectation(description: #function)
         
         let expectedButtonState = false
-        let emptyUserName = "user@mail.com"
-        let emptyPassword = "123456"
+        let userName = "user@mail.com"
+        let tooShortPassword = "123456"
         
         presenter.buttonLoginState = { state in
             XCTAssertTrue(state == expectedButtonState, #function)
             expected.fulfill()
         }
         
-        presenter.set(userName: emptyUserName, password: emptyPassword)
+        presenter.set(userName: userName, password: tooShortPassword)
         
         waitForExpectations(timeout: 1) { error in
             if let e = error {
@@ -148,15 +148,15 @@ class LoginPresenterTests: XCTestCase {
         let expected = expectation(description: #function)
         
         let expectedButtonState = false
-        let emptyUserName = "user@mail.com"
-        let emptyPassword = "123456789abcdefg"
+        let userName = "user@mail.com"
+        let tooLongPassword = "123456789abcdefg"
         
         presenter.buttonLoginState = { state in
             XCTAssertTrue(state == expectedButtonState, #function)
             expected.fulfill()
         }
         
-        presenter.set(userName: emptyUserName, password: emptyPassword)
+        presenter.set(userName: userName, password: tooLongPassword)
         
         waitForExpectations(timeout: 1) { error in
             if let e = error {
@@ -169,15 +169,15 @@ class LoginPresenterTests: XCTestCase {
         let expected = expectation(description: #function)
         
         let expectedButtonState = true
-        let emptyUserName = "user@mail.com"
-        let emptyPassword = "12345678"
+        let userName = "user@mail.com"
+        let password = "12345678"
     
         presenter.buttonLoginState = { state in
             XCTAssertTrue(state == expectedButtonState, #function)
             expected.fulfill()
         }
         
-        presenter.set(userName: emptyUserName, password: emptyPassword)
+        presenter.set(userName: userName, password: password)
         
         waitForExpectations(timeout: 1) { error in
             if let e = error {
@@ -186,4 +186,27 @@ class LoginPresenterTests: XCTestCase {
         }
     }
     
+    func testAuthenWithStubUserServiceShouldReturnSuccess() {
+        let expected = expectation(description: #function)
+        let userName = "user@mail.com"
+        let password = "12345678"
+        let expectedResult = true
+        let expectedMessage = "granted"
+        
+        presenter.userServices = StubUserServiceSuccess()
+        
+        presenter.userAuthenCallback = { result, message in
+            XCTAssertTrue(expectedResult == result, "expected :- \(expectedResult), actual :- \(result)")
+            XCTAssertTrue(expectedMessage == message, "expected :- \(expectedMessage), actual :- \(message)")
+            expected.fulfill()
+        }
+        
+        presenter.authen(with: userName, password: password)
+        
+        waitForExpectations(timeout: 1) { error in
+            if let e = error {
+                XCTFail(e.localizedDescription)
+            }
+        }
+    }
 }
