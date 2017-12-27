@@ -46,7 +46,7 @@ class LoginPresenterTests: XCTestCase {
         presenter = LoginPresenter()
     }
     
-    func testLoginButtonStateWithUsernameAndPassword() {
+    func testLoginButtonStateWithUsernameAndPasswordSpecs() {
         testData.forEach { testCase, username, password, expectedButtonLoginState in
             let expected = expectation(description: testCase)
             
